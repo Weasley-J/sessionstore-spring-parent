@@ -33,9 +33,9 @@
     </developers>
 
     <scm>
-        <url>https://github.com/Weasley-J/sessionstore-spring-starter</url>
-        <connection>https://github.com/Weasley-J/sessionstore-spring-starter.git</connection>
-        <developerConnection>https://github.com/Weasley-J/sessionstore-spring-starter</developerConnection>
+        <url>https://github.com/Weasley-J/sessionstore-spring-parent</url>
+        <connection>https://github.com/Weasley-J/sessionstore-spring-parent.git</connection>
+        <developerConnection>https://github.com/Weasley-J/sessionstore-spring-parent</developerConnection>
     </scm>
 
     <properties>
