@@ -1,7 +1,9 @@
 # sessionstore-spring-parent
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.weasley-j/sessionstore-spring-parent)](https://search.maven.org/artifact/io.github.weasley-j/sessionstore-spring-parent-starter)
+
 > 一个用于将**特定类型的数据**和**业务数据**解耦并独立存储的`spring-boot-starter`，允许选择性地将数据存放到独立的`Redis`
-> 数据库中，基于`Redisson`实现。
+> 数据库中，基于`Redisson`实现，可以充分利用Redis的0~15号索引数据库。
 
 
 
@@ -38,7 +40,7 @@
 
 ### 1.2 配置Redis连接信息
 
-[元数配置类]()
+[元数配置类](https://github.com/Weasley-J/sessionstore-spring-parent/blob/main/sessionstore-spring-starter/src/main/java/io/github/weasleyj/sessionstore/config/SessionStoreRedisProperties.java#L20-L69)
 
 ```yaml
 session:
