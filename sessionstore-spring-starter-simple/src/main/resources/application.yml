@@ -1,0 +1,9 @@
+session:
+  store:
+    enable: on
+    redis:
+      database: 1
+      ssl: off
+      host: 192.168.31.140
+      port: 6379
+      password: 123456
