@@ -45,6 +45,9 @@ public final class RedissonClientHelper {
         return redissonClientInstance;
     }
 
+    /**
+     * 关闭 Redisson 客户端
+     */
     public static void shutdownRedissonClient() {
         if (redissonClientInstance != null) {
             redissonClientInstance.shutdown();
