@@ -213,7 +213,7 @@ class RedissonClientHelperTest {
         bucket.set(user, Duration.ofMinutes(30));
         Assertions.assertNotNull(user);
         System.out.println(user); // User(id=1, name=张三, age=22)
-        RedissonClientHelper.shutdownRedissonClient();
+        redissonClient.shutdown();
     }
 
     @Test
@@ -223,7 +223,7 @@ class RedissonClientHelperTest {
         RBucket<UserDTO> bucket = redissonClient.getBucket(KEY_PREFIX + ":" + 1, CodecSupport.codec(UserDTO.class));
         System.out.println(bucket.get()); // UserDTO(uid=null, name=张三, age=22)
         Assertions.assertNotNull(bucket.get());
-        RedissonClientHelper.shutdownRedissonClient();
+        redissonClient.shutdown();
     }
 
 }
