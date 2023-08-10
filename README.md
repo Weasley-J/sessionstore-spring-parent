@@ -34,7 +34,7 @@
 <dependency>
     <groupId>io.github.weasley-j</groupId>
     <artifactId>sessionstore-spring-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -172,7 +172,7 @@ public class SimpleController {
 
 #### 1.4.2 使用`RedissonClientHelper#createRedissonClient(int)`创建指定索引库的客户端
 
-> `RedissonClientHelper#createRedissonClient`创建的`RedissonClient` 是线程安全的，并且不受`Spring IOC`托管，使用完成后，使用完后接的调用 `RedissonClientHelper#shutdownRedissonClient` 释放资源。
+> `RedissonClientHelper#createRedissonClient`创建的`RedissonClient`不受`Spring IOC`托管，使用完成后，使用完后需要关闭资源。
 
 代码示例：
 

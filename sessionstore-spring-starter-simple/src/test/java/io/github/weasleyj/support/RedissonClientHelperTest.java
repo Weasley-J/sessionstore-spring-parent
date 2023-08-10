@@ -15,6 +15,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RedissonClientHelper Test
@@ -33,6 +34,23 @@ class RedissonClientHelperTest {
     }
 
     @Test
+    @DisplayName("资源抢占测试: 并发创建指定索引库的RedissonClient并存入数据")
+    void createRedissonClientConcurrency() throws InterruptedException {
+        for (int i = 0; i <= 15; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                RedissonClient redissonClient = RedissonClientHelper.createRedissonClient(finalI);
+                RBucket<User> bucket = redissonClient.getBucket(KEY_PREFIX + ":" + 1, CodecSupport.codec(User.class));
+                bucket.set(new User(), Duration.ofMinutes(30));
+                System.out.println(Thread.currentThread().getName() + ": " + bucket.get());
+                Assertions.assertNotNull(bucket.get());
+                redissonClient.shutdown();
+            }).start();
+        }
+        TimeUnit.SECONDS.sleep(2);
+    }
+
+    @Test
     @DisplayName("创建Client并指定Redis索引库")
     void createRedissonClient() {
         RedissonClient redissonClient = RedissonClientHelper.createRedissonClient(2);
@@ -44,7 +62,7 @@ class RedissonClientHelperTest {
         bucket.set(user, Duration.ofMinutes(30));
         Assertions.assertNotNull(user);
         System.out.println(user); // User(id=1, name=张三, age=22)
-        RedissonClientHelper.shutdownRedissonClient();
+        RedissonClientHelper.shutdownRedissonClient(redissonClient);
     }
 
     @Test
@@ -54,7 +72,7 @@ class RedissonClientHelperTest {
         RBucket<UserDTO> bucket = redissonClient.getBucket(KEY_PREFIX + ":" + 1, CodecSupport.codec(UserDTO.class));
         System.out.println(bucket.get()); // UserDTO(uid=null, name=张三, age=22)
         Assertions.assertNotNull(bucket.get());
-        RedissonClientHelper.shutdownRedissonClient();
+        RedissonClientHelper.shutdownRedissonClient(redissonClient);
     }
 
 }

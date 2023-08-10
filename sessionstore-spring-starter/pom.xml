@@ -11,7 +11,7 @@
 
     <groupId>io.github.weasley-j</groupId>
     <artifactId>sessionstore-spring-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>sessionstore-spring-starter</name>
     <url>https://github.com/Weasley-J/sessionstore-spring-parent</url>
     <description>一个用于将特定类型的数据和业务数据解耦并独立存储的spring-boot-starter，允许选择性地将数据存放到独立的Redis数据库中，基于Redisson实现，可以充分利用Redis的0~15号索引数据库</description>

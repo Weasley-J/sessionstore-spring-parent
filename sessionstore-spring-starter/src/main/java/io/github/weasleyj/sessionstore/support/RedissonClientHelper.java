@@ -16,7 +16,6 @@ import org.springframework.util.Assert;
  * @since 1.0.0
  */
 public final class RedissonClientHelper {
-    private static volatile RedissonClient redissonClientInstance;
 
     private RedissonClientHelper() {
     }
@@ -26,31 +25,24 @@ public final class RedissonClientHelper {
      *
      * @param database Redis数据库的索引, 取值范围 [0,15]
      * @return 指定Redis数据库的索引的Redisson客户端
-     * @apiNote 此方法创建的 RedissonClient 是线程安全的，并且不受 Spring IOC 托管，使用完后接的调用 shutdownRedissonClient 释放资源
-     * @see RedissonClientHelper#shutdownRedissonClient()
-     * @see SessionStoreRedisProperties
+     * @apiNote 此方法创建的 RedissonClient 不受 Spring IOC 托管，使用完后需要关闭资源
+     * @see RedissonClientHelper#shutdownRedissonClient(RedissonClient)
+     * @see RedissonClient#shutdown()
      */
     public static RedissonClient createRedissonClient(int database) {
         Assert.isTrue(database >= 0 && database <= 15, "Database must be in [0,15].");
-        RedissonClient redissonClient = redissonClientInstance;
-        if (redissonClient == null) {
-            synchronized (RedissonClientHelper.class) {
-                redissonClient = redissonClientInstance;
-                if (redissonClient == null) {
-                    RedisProperties redisProperties = getRedisProperties(database);
-                    redissonClientInstance = createRedissonClient(redisProperties);
-                }
-            }
-        }
-        return redissonClientInstance;
+        RedisProperties redisProperties = getRedisProperties(database);
+        return createRedissonInstance(redisProperties);
     }
 
     /**
      * 关闭 Redisson 客户端
+     *
+     * @param redissonClient The redisson client you want to shut down
      */
-    public static void shutdownRedissonClient() {
-        if (redissonClientInstance != null) {
-            redissonClientInstance.shutdown();
+    public static void shutdownRedissonClient(RedissonClient redissonClient) {
+        if (redissonClient != null) {
+            redissonClient.shutdown();
         }
     }
 
@@ -78,7 +70,7 @@ public final class RedissonClientHelper {
      * @param redisProperties redis配置属数据
      * @return RedissonClient
      */
-    private static RedissonClient createRedissonClient(RedisProperties redisProperties) {
+    private static RedissonClient createRedissonInstance(RedisProperties redisProperties) {
         Config config = new Config();
         config.setCodec(new JsonJacksonCodec());
         SingleServerConfig singleServer = config.useSingleServer()
